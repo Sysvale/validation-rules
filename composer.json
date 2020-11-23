@@ -7,11 +7,14 @@
     "authors": [
         {
             "name": "Jedson Melo",
-            "email": "jedsonmeloc@gmail.com"
+            "email": "jedson.melo@sysvale.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.2"
+    },
     "require-dev": {
+        "ext-zip": "*",
         "mockery/mockery": "^1.3",
         "phpunit/phpunit": "^8.5.8|^9.3.3",
         "orchestra/testbench": "^5.8"
