@@ -1,0 +1,29 @@
+{
+    "version": "1.0.0",
+    "name": "sysvale/zip-with-xml-validations",
+    "description": "A package to help to validate zip file that contains a xml file",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jedson Melo",
+            "email": "jedsonmeloc@gmail.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "mockery/mockery": "^1.3",
+        "phpunit/phpunit": "^8.5.8|^9.3.3",
+        "orchestra/testbench": "^5.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sysvale\\ZipWithXMLValidations\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sysvale\\ZipWithXMLValidations\\Tests\\": "tests/"
+        }
+    }
+}
