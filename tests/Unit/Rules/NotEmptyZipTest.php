@@ -4,6 +4,8 @@ namespace Tests\Unit\App\Rules;
 
 use Mockery;
 use ZipArchive;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 use Sysvale\ZipWithXMLValidations\Tests\TestCase;
 use Sysvale\ZipWithXMLValidations\Rules\NotEmptyZip;
 use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
@@ -48,5 +50,20 @@ class NotEmptyZipTest extends TestCase
 				0, false
 			],
 		];
+	}
+
+	public function testReturnCorrectlyMessage()
+	{
+		Config::set('app.locale', 'pt_BR');
+
+		$mock_rule = Mockery::mock(NotEmptyZip::class)->makePartial();
+		$mock_rule->shouldReceive('passes')->andReturn(false);
+
+		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);
+
+		$this->assertSame(
+			'O arquivo zip não pode está vazio.',
+			$validator->errors()->first('file')
+		);
 	}
 }

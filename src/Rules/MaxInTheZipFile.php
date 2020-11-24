@@ -44,7 +44,8 @@ class MaxInTheZipFile implements Rule
 	 */
 	public function message()
 	{
-		$s = $this->quantity > 1 ? 's' : '';
-		return "O arquivo zip deve ter no máximo $this->quantity arquivo{$s}";
+		return __('ZipWithXMLValidations::messages.max_in_the_zip_file', [
+			'quantity' => $this->quantity,
+		]);
 	}
 }

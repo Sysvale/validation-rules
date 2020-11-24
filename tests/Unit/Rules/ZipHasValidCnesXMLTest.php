@@ -3,6 +3,8 @@
 namespace Tests\Feature\App\Rules;
 
 use Mockery;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 use Sysvale\ZipWithXMLValidations\Tests\TestCase;
 use Sysvale\ZipWithXMLValidations\Rules\ZipHasValidCnesXML;
 use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
@@ -81,5 +83,20 @@ class ZipHasValidCnesXMLTest extends TestCase
 			->andReturn($contents);
 
 		app()->instance(ZipWithXMLHandler::class, $handler_mock);
+	}
+
+	public function testReturnCorrectlyMessage()
+	{
+		Config::set('app.locale', 'pt_BR');
+
+		$mock_rule = Mockery::mock(ZipHasValidCnesXML::class)->makePartial();
+		$mock_rule->shouldReceive('passes')->andReturn(false);
+
+		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);
+
+		$this->assertSame(
+			'O XML apresentou inconsistências. Pedimos que o envie novamente.',
+			$validator->errors()->first('file')
+		);
 	}
 }

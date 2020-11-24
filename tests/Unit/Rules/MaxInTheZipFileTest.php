@@ -4,6 +4,8 @@ namespace Sysvale\ZipWithXMLValidations\Tests\Unit\Rules;
 
 use Mockery;
 use ZipArchive;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 use Sysvale\ZipWithXMLValidations\Tests\TestCase;
 use Sysvale\ZipWithXMLValidations\Rules\MaxInTheZipFile;
 use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
@@ -51,5 +53,20 @@ class MaxInTheZipFileTest extends TestCase
 				1, 1, true
 			],
 		];
+	}
+
+	public function testReturnCorrectlyMessage()
+	{
+		Config::set('app.locale', 'pt_BR');
+
+		$mock_rule = Mockery::mock(MaxInTheZipFile::class . '[passes]', [2]);
+		$mock_rule->shouldReceive('passes')->andReturn(false);
+
+		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);
+
+		$this->assertSame(
+			'O arquivo zip deve ter no máximo 2 arquivo(s).',
+			$validator->errors()->first('file')
+		);
 	}
 }

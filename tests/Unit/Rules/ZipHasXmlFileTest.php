@@ -4,6 +4,8 @@ namespace Tests\Unit\App\Rules;
 
 use Mockery;
 use ZipArchive;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
 use Sysvale\ZipWithXMLValidations\Tests\TestCase;
 use Sysvale\ZipWithXMLValidations\Rules\ZipHasXmlFile;
 use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
@@ -52,5 +54,20 @@ class ZipHasXmlFileTest extends TestCase
 				'bar.txt', false
 			],
 		];
+	}
+
+	public function testReturnCorrectlyMessage()
+	{
+		Config::set('app.locale', 'pt_BR');
+
+		$mock_rule = Mockery::mock(ZipHasXmlFile::class)->makePartial();
+		$mock_rule->shouldReceive('passes')->andReturn(false);
+
+		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);
+
+		$this->assertSame(
+			'O arquivo zip deve conter um XML.',
+			$validator->errors()->first('file')
+		);
 	}
 }

@@ -31,6 +31,6 @@ class NotEmptyZip implements Rule
 	 */
 	public function message()
 	{
-		return 'O arquivo zip não pode ser vazio.';
+		return __('ZipWithXMLValidations::messages.not_empty_zip');
 	}
 }

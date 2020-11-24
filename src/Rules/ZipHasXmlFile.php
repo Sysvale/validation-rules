@@ -32,6 +32,6 @@ class ZipHasXmlFile implements Rule
 	 */
 	public function message()
 	{
-		return 'O arquivo zip deve conter um XML.';
+		return __('ZipWithXMLValidations::messages.zip_has_xml_file');
 	}
 }

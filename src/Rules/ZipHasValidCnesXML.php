@@ -43,7 +43,7 @@ class ZipHasValidCnesXML implements Rule
 	 */
 	public function message()
 	{
-		return 'O XML apresentou inconsistências. Pedimos que o envie novamente.';
+		return __('ZipWithXMLValidations::messages.zip_has_valid_cnes_xml');
 	}
 
 
