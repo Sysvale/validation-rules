@@ -1,6 +1,6 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Providers;
+namespace Sysvale\ValidationRules\Providers;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
@@ -12,13 +12,13 @@ class ServiceProvider extends BaseServiceProvider
 			$this->registerPublishing();
 		}
 
-		$this->loadTranslationsFrom(__DIR__.'/../../resources/lang/', 'ZipWithXMLValidations');
+		$this->loadTranslationsFrom(__DIR__.'/../../resources/lang/', 'SysvaleValidationRules');
 	}
 
 	protected function registerPublishing()
 	{
 		$this->publishes([
-			__DIR__.'/../../resources/lang' => resource_path('lang/vendor/ZipWithXMLValidations'),
-		], 'zip-with-xml-validations-messages');
+			__DIR__.'/../../resources/lang' => resource_path('lang/vendor/SysvaleValidationRules'),
+		], 'sysvale-validation-rules-messages');
 	}
 }

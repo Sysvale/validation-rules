@@ -1,8 +1,8 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Tests;
+namespace Sysvale\ValidationRules\Tests;
 
-use Sysvale\ZipWithXMLValidations\Providers\ServiceProvider;
+use Sysvale\ValidationRules\Providers\ServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

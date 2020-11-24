@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\App\Rules;
+namespace Sysvale\ValidationRules\Tests\Unit\Rules;
 
 use Mockery;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use Sysvale\ZipWithXMLValidations\Tests\TestCase;
-use Sysvale\ZipWithXMLValidations\Rules\ZipHasValidCnesXML;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Tests\TestCase;
+use Sysvale\ValidationRules\Rules\ZipHasValidCnesXML;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipHasValidCnesXMLTest extends TestCase
 {

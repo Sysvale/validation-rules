@@ -1,10 +1,10 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Rules;
+namespace Sysvale\ValidationRules\Rules;
 
 use SimpleXMLElement;
 use Illuminate\Contracts\Validation\Rule;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipHasValidCnesXML implements Rule
 {
@@ -43,7 +43,7 @@ class ZipHasValidCnesXML implements Rule
 	 */
 	public function message()
 	{
-		return __('ZipWithXMLValidations::messages.zip_has_valid_cnes_xml');
+		return __('SysvaleValidationRules::messages.zip_has_valid_cnes_xml');
 	}
 
 

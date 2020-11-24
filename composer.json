@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
-    "name": "sysvale/zip-with-xml-validations",
-    "description": "A package to help to validate zip file that contains a xml file",
+    "name": "sysvale/validation-rules",
+    "description": "A Laravel library with useful custom rules",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sysvale\\ZipWithXMLValidations\\": "src/"
+            "Sysvale\\ValidationRules\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sysvale\\ZipWithXMLValidations\\Tests\\": "tests/"
+            "Sysvale\\ValidationRules\\Tests\\": "tests/"
         }
     }
 }

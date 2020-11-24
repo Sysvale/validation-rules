@@ -1,6 +1,6 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Support;
+namespace Sysvale\ValidationRules\Support;
 
 use ZipArchive;
 use SimpleXMLElement;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Tests\Unit\Rules;
+namespace Sysvale\ValidationRules\Tests\Unit\Rules;
 
 use Mockery;
 use ZipArchive;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use Sysvale\ZipWithXMLValidations\Tests\TestCase;
-use Sysvale\ZipWithXMLValidations\Rules\MaxInTheZipFile;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Tests\TestCase;
+use Sysvale\ValidationRules\Rules\MaxInTheZipFile;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class MaxInTheZipFileTest extends TestCase
 {

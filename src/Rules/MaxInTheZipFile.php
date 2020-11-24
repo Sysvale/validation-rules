@@ -1,9 +1,9 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Rules;
+namespace Sysvale\ValidationRules\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class MaxInTheZipFile implements Rule
 {
@@ -44,7 +44,7 @@ class MaxInTheZipFile implements Rule
 	 */
 	public function message()
 	{
-		return __('ZipWithXMLValidations::messages.max_in_the_zip_file', [
+		return __('SysvaleValidationRules::messages.max_in_the_zip_file', [
 			'quantity' => $this->quantity,
 		]);
 	}

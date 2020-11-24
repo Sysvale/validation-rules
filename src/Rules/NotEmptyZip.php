@@ -1,9 +1,9 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Rules;
+namespace Sysvale\ValidationRules\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class NotEmptyZip implements Rule
 {
@@ -31,6 +31,6 @@ class NotEmptyZip implements Rule
 	 */
 	public function message()
 	{
-		return __('ZipWithXMLValidations::messages.not_empty_zip');
+		return __('SysvaleValidationRules::messages.not_empty_zip');
 	}
 }

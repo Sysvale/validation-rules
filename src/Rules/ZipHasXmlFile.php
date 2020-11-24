@@ -1,10 +1,10 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Rules;
+namespace Sysvale\ValidationRules\Rules;
 
 use Illuminate\Support\Str;
 use Illuminate\Contracts\Validation\Rule;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipHasXmlFile implements Rule
 {
@@ -32,6 +32,6 @@ class ZipHasXmlFile implements Rule
 	 */
 	public function message()
 	{
-		return __('ZipWithXMLValidations::messages.zip_has_xml_file');
+		return __('SysvaleValidationRules::messages.zip_has_xml_file');
 	}
 }

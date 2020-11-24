@@ -1,12 +1,12 @@
 <?php
 
-namespace Sysvale\ZipWithXMLValidations\Tests\Feature\Support;
+namespace Sysvale\ValidationRules\Tests\Feature\Support;
 
 use Mockery;
 use ZipArchive;
 use SimpleXMLElement;
-use Sysvale\ZipWithXMLValidations\Tests\TestCase;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Tests\TestCase;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipWithXMLHandlerTest extends TestCase
 {

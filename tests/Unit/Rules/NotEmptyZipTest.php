@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit\App\Rules;
+namespace Sysvale\ValidationRules\Tests\Unit\Rules;
 
 use Mockery;
 use ZipArchive;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
-use Sysvale\ZipWithXMLValidations\Tests\TestCase;
-use Sysvale\ZipWithXMLValidations\Rules\NotEmptyZip;
-use Sysvale\ZipWithXMLValidations\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Tests\TestCase;
+use Sysvale\ValidationRules\Rules\NotEmptyZip;
+use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class NotEmptyZipTest extends TestCase
 {
