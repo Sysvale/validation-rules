@@ -40,20 +40,29 @@ class ZipWithXMLHandlerTest extends TestCase
 
 	public function testGetXmlContentCorrectly()
 	{
-		$content = '<root><child>child name</child></root>';
-
-		$zip_filename = __DIR__.'dummy.zip';
+		$zip_filename = __DIR__ . '/dummy.zip';
 
 		$zip = new ZipArchive;
 		if ($zip->open($zip_filename, ZipArchive::CREATE) === true) {
-			$zip->addFromString('xml.xml', $content);
+			$contents = '<root><child>child name</child></root>';
+			$zip->addFromString('xml.xml', $contents);
 			$zip->close();
+		} else {
+			throw new \Exception("Doesnt could open the file $zip_filename");
 		}
 
 		$zip_handler = new ZipWithXMLHandler;
 		$zip_handler->buildZip($zip_filename);
 
-		$this->assertSame($content, $zip_handler->getXmlContent());
+		try {
+			$result_contents = $zip_handler->getXmlContent();
+		} catch (\Throwable $th) {
+			unlink($zip_filename);
+			throw $th;
+		}
+
 		unlink($zip_filename);
+
+		$this->assertSame($contents, $result_contents);
 	}
 }
