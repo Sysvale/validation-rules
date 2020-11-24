@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "sysvale/validation-rules",
     "description": "A Laravel library with useful custom rules",
     "type": "library",
@@ -28,6 +28,13 @@
     "autoload-dev": {
         "psr-4": {
             "Sysvale\\ValidationRules\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sysvale\\ValidationRules\\Providers\\ServiceProvider"
+            ]
         }
     }
 }
