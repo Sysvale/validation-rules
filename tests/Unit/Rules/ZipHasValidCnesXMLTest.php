@@ -62,12 +62,12 @@ class ZipHasValidCnesXMLTest extends TestCase
 		$this->assertFalse($passes);
 	}
 
-	private function mockXmlContents($code, $contents = null)
+	private function mockXmlContents($code, $contents = null, $date = '2020-10-17')
 	{
 		if (is_null($contents)) {
 			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
 			<ImportarXMLCNES>
-				<IDENTIFICACAO ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$code\">\r\n
+				<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$code\">\r\n
 					<ESTABELECIMENTOS>\r\n
 					</ESTABELECIMENTOS>\r\n
 					<PROFISSIONAIS>\r\n
