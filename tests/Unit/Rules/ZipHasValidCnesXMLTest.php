@@ -99,4 +99,25 @@ class ZipHasValidCnesXMLTest extends TestCase
 			$validator->errors()->first('file')
 		);
 	}
+	public function testValidFileWithIncorretDatePasses()
+	{
+		$this->mockXmlContents('bar');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
+		$passes = $rule->passes('dummy', $file);
+
+		$this->assertFalse($passes);
+	}
+
+	public function testValidFileWithCorretDatePasses()
+	{
+		$this->mockXmlContents('bar', null, '2020-10-19');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
+		$passes = $rule->passes('dummy', $file);
+
+		$this->assertTrue($passes);
+	}
 }
