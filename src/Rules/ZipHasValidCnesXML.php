@@ -9,10 +9,12 @@ use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 class ZipHasValidCnesXML implements Rule
 {
 	private $expected_ibge_code;
+	private $last_date_xml;
 
-	public function __construct($expected_ibge_code)
+	public function __construct($expected_ibge_code, $last_date_xml = null)
 	{
 		$this->expected_ibge_code = $expected_ibge_code;
+		$this->last_date_xml = $last_date_xml;
 	}
 
 	/**
@@ -29,7 +31,8 @@ class ZipHasValidCnesXML implements Rule
 		$xml = $zip_handler->getSimpleXMLElement();
 
 		$passes = $this->hasValidIdentification($xml)
-			&& $this->hasEstablishmentAndProfessionals($xml);
+			&& $this->hasEstablishmentAndProfessionals($xml)
+			&& $this->hasDateValid($xml);
 
 		$zip_handler->closeZip();
 
@@ -80,5 +83,16 @@ class ZipHasValidCnesXML implements Rule
 		}
 
 		return $passes;
+	}
+
+	protected function hasDateValid(SimpleXMLElement $xml)
+	{
+		$identification = $xml->{'IDENTIFICACAO'};
+		$date = array_values((array) $identification->attributes())[0]['DATA'];
+
+		if ($date > $this->last_date_xml) {
+			return true;
+		}
+		return false;
 	}
 }
