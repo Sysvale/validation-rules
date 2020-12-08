@@ -11,9 +11,6 @@ use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipHasValidCnesXMLTest extends TestCase
 {
-	public function testInvalidFileDontPasses()
-	{
-		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
 
 	private function getFile()
 	{
@@ -25,6 +22,12 @@ class ZipHasValidCnesXMLTest extends TestCase
 		};
 	}
 
+	public function testInvalidFileDontPasses()
+	{
+		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('');
 		$passes = $rule->passes('dummy', $file);
 
 		$this->assertFalse($passes);
@@ -35,12 +38,8 @@ class ZipHasValidCnesXMLTest extends TestCase
 		$this->mockXmlContents('foobar');
 
 		$rule = new ZipHasValidCnesXML('foobar');
-		$file = new class {
-			public function path()
-			{
-				return '';
-			}
-		};
+		$file = $file = $this->getFile();
+
 		$passes = $rule->passes('dummy', $file);
 
 		$this->assertTrue($passes);
@@ -50,13 +49,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents('bar');
 
-		$file = new class {
-			public function path()
-			{
-				return '';
-			}
-		};
-
+		$file = $file = $this->getFile();
 		$rule = new ZipHasValidCnesXML('foo');
 		$passes = $rule->passes('dummy', $file);
 
@@ -100,6 +93,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 			$validator->errors()->first('file')
 		);
 	}
+
 	public function testValidFileWithIncorretDatePasses()
 	{
 		$this->mockXmlContents('bar');
