@@ -15,14 +15,15 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
 
-		$rule = new ZipHasValidCnesXML('');
-
-		$file = new class {
+	private function getFile()
+	{
+		return new class {
 			public function path()
 			{
 				return '';
 			}
 		};
+	}
 
 		$passes = $rule->passes('dummy', $file);
 
