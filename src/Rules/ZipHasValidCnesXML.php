@@ -88,10 +88,15 @@ class ZipHasValidCnesXML implements Rule
 		return $passes;
 	}
 
-	protected function hasDateValid(SimpleXMLElement $xml)
+	private function getValueDateOrFalse($xml)
 	{
-		$identification = $xml->{'IDENTIFICACAO'};
-		$date = array_values((array) $identification->attributes())[0]['DATA'];
+		if (!empty($xml->{'IDENTIFICACAO'})) {
+			$identification = $xml->{'IDENTIFICACAO'};
+			return array_values((array) $identification->attributes())[0]['DATA'];
+		}
+
+		return false;
+	}
 
 		if ($date > $this->last_date_xml) {
 			return true;
