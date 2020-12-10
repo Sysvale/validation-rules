@@ -98,9 +98,14 @@ class ZipHasValidCnesXML implements Rule
 		return false;
 	}
 
-		if ($date > $this->last_date_xml) {
+	protected function hasValidDate(SimpleXMLElement $xml)
+	{
+		$current_date_xml = $this->getValueDateOrFalse($xml);
+
+		if ($current_date_xml > $this->last_date_xml) {
 			return true;
 		}
+
 		return false;
 	}
 }
