@@ -31,8 +31,11 @@ class ZipHasValidCnesXML implements Rule
 		$xml = $zip_handler->getSimpleXMLElement();
 
 		$passes = $this->hasValidIdentification($xml)
-			&& $this->hasEstablishmentAndProfessionals($xml)
-			&& $this->hasDateValid($xml);
+			&& $this->hasEstablishmentAndProfessionals($xml);
+
+		if (isset($this->last_date_xml)) {
+			$passes = $passes && $this->hasValidDate($xml);
+		}
 
 		$zip_handler->closeZip();
 
