@@ -11,19 +11,23 @@ use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class ZipHasValidCnesXMLTest extends TestCase
 {
-	public function testInvalidFileDontPasses()
+
+	private function getFile()
 	{
-		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
-
-		$rule = new ZipHasValidCnesXML('');
-
-		$file = new class {
+		return new class {
 			public function path()
 			{
 				return '';
 			}
 		};
+	}
 
+	public function testInvalidFileDontPasses()
+	{
+		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('');
 		$passes = $rule->passes('dummy', $file);
 
 		$this->assertFalse($passes);
@@ -34,12 +38,8 @@ class ZipHasValidCnesXMLTest extends TestCase
 		$this->mockXmlContents('foobar');
 
 		$rule = new ZipHasValidCnesXML('foobar');
-		$file = new class {
-			public function path()
-			{
-				return '';
-			}
-		};
+		$file = $file = $this->getFile();
+
 		$passes = $rule->passes('dummy', $file);
 
 		$this->assertTrue($passes);
@@ -49,25 +49,19 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents('bar');
 
-		$file = new class {
-			public function path()
-			{
-				return '';
-			}
-		};
-
+		$file = $file = $this->getFile();
 		$rule = new ZipHasValidCnesXML('foo');
 		$passes = $rule->passes('dummy', $file);
 
 		$this->assertFalse($passes);
 	}
 
-	private function mockXmlContents($code, $contents = null)
+	private function mockXmlContents($code, $contents = null, $date = '2020-10-17')
 	{
 		if (is_null($contents)) {
 			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
 			<ImportarXMLCNES>
-				<IDENTIFICACAO ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$code\">\r\n
+				<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$code\">\r\n
 					<ESTABELECIMENTOS>\r\n
 					</ESTABELECIMENTOS>\r\n
 					<PROFISSIONAIS>\r\n
@@ -98,5 +92,27 @@ class ZipHasValidCnesXMLTest extends TestCase
 			'O XML apresentou inconsistências. Pedimos que o envie novamente.',
 			$validator->errors()->first('file')
 		);
+	}
+
+	public function testValidFileWithIncorretDatePasses()
+	{
+		$this->mockXmlContents('bar');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
+		$passes = $rule->passes('dummy', $file);
+
+		$this->assertFalse($passes);
+	}
+
+	public function testValidFileWithCorretDatePasses()
+	{
+		$this->mockXmlContents('bar', null, '2020-10-19');
+
+		$file = $this->getFile();
+		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
+		$passes = $rule->passes('dummy', $file);
+
+		$this->assertTrue($passes);
 	}
 }
