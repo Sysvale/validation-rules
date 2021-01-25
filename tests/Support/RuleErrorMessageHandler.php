@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Validator;
 
 trait RuleErrorMessageHandler
 {
-	public function getErrorMessage($rule_class)
+	public function getErrorMessage($rule_class, $args = [])
 	{
 		Config::set('app.locale', 'pt_BR');
 
-		$mock_rule = Mockery::mock($rule_class)->makePartial();
+		$mock_rule = Mockery::mock($rule_class, $args)->makePartial();
 		$mock_rule->shouldReceive('passes')->andReturn(false);
 
 		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);

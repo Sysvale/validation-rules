@@ -10,12 +10,15 @@ trait CnesXMLContentsHandler
 	/**
 	 * @phpcs:disable Generic.Files.LineLength.TooLong
 	 */
-	private function mockXmlContents($ibge_code = '000000', $contents = null)
+	private function mockXmlContents($data = [], $contents = null)
 	{
 		if (is_null($contents)) {
+			$ibge_code = $data['ibge_code'] ?? '';
+			$date = $data['date'] ?? '';
+
 			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
 				<ImportarXMLCNES>
-					<IDENTIFICACAO DATA=\"2020-10-10\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$ibge_code\">\r\n
+					<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$ibge_code\">\r\n
 						<ESTABELECIMENTOS>\r\n
 						</ESTABELECIMENTOS>\r\n
 						<PROFISSIONAIS>\r\n
