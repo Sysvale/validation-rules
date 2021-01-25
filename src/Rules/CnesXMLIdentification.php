@@ -6,7 +6,7 @@ use SimpleXMLElement;
 use Illuminate\Contracts\Validation\Rule;
 use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
-class CnesXMLHasCorrectIdentification implements Rule
+class CnesXMLIdentification implements Rule
 {
 	private $expected_ibge_code;
 
@@ -41,7 +41,7 @@ class CnesXMLHasCorrectIdentification implements Rule
 	 */
 	public function message()
 	{
-		return __('SysvaleValidationRules::messages.cnes_xml_has_correct_identification');
+		return __('SysvaleValidationRules::messages.cnes_xml_identification');
 	}
 
 
