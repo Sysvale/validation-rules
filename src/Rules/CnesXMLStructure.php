@@ -37,7 +37,6 @@ class CnesXMLStructure implements Rule
 		return __('SysvaleValidationRules::messages.cnes_xml_structure');
 	}
 
-
 	protected function hasValidSctructure(SimpleXMLElement $xml)
 	{
 		return $xml->getName() === 'ImportarXMLCNES'
