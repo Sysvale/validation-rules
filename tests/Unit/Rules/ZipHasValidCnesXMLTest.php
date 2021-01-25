@@ -3,14 +3,24 @@
 namespace Sysvale\ValidationRules\Tests\Unit\Rules;
 
 use Mockery;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Sysvale\ValidationRules\Tests\TestCase;
 use Sysvale\ValidationRules\Rules\ZipHasValidCnesXML;
 use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
+use Sysvale\ValidationRules\Tests\Support\CnesXMLContentsHandler;
 
 class ZipHasValidCnesXMLTest extends TestCase
 {
+	use CnesXMLContentsHandler;
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		Config::set('app.locale', 'pt_BR');
+	}
 
 	private function getFile()
 	{
@@ -22,96 +32,71 @@ class ZipHasValidCnesXMLTest extends TestCase
 		};
 	}
 
-	public function testInvalidFileDontPasses()
+	public function testFileWithInvalidStructureDontPasses()
 	{
 		$this->mockXmlContents(null, '<root><ImportarXMLCNES></ImportarXMLCNES></root>');
 
 		$file = $this->getFile();
-		$rule = new ZipHasValidCnesXML('');
-		$passes = $rule->passes('dummy', $file);
+		$validator = Validator::make([
+			'file' => UploadedFile::fake()->create('xml.zip'),
+		], [
+			'file' => [new ZipHasValidCnesXML('')],
+		]);
+
+		$passes = $validator->passes();
 
 		$this->assertFalse($passes);
-	}
-
-	public function testValidFilePasses()
-	{
-		$this->mockXmlContents('foobar');
-
-		$rule = new ZipHasValidCnesXML('foobar');
-		$file = $file = $this->getFile();
-
-		$passes = $rule->passes('dummy', $file);
-
-		$this->assertTrue($passes);
-	}
-
-	public function testValidFileWithIncorretIbgeCodeDontPasses()
-	{
-		$this->mockXmlContents('bar');
-
-		$file = $file = $this->getFile();
-		$rule = new ZipHasValidCnesXML('foo');
-		$passes = $rule->passes('dummy', $file);
-
-		$this->assertFalse($passes);
-	}
-
-	private function mockXmlContents($code, $contents = null, $date = '2020-10-17')
-	{
-		if (is_null($contents)) {
-			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
-			<ImportarXMLCNES>
-				<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$code\">\r\n
-					<ESTABELECIMENTOS>\r\n
-					</ESTABELECIMENTOS>\r\n
-					<PROFISSIONAIS>\r\n
-					</PROFISSIONAIS>\r\n
-				</IDENTIFICACAO>\r\n
-			</ImportarXMLCNES>\r\n";
-		}
-
-		$handler_mock = Mockery::mock(ZipWithXMLHandler::class)->makePartial();
-		$handler_mock->shouldReceive('closeZip')->andReturn(true);
-		$handler_mock->shouldReceive('buildZip')->andReturn(Mockery::self());
-		$handler_mock->shouldReceive('getXmlContent')
-			->andReturn($contents);
-
-		app()->instance(ZipWithXMLHandler::class, $handler_mock);
-	}
-
-	public function testReturnCorrectlyMessage()
-	{
-		Config::set('app.locale', 'pt_BR');
-
-		$mock_rule = Mockery::mock(ZipHasValidCnesXML::class)->makePartial();
-		$mock_rule->shouldReceive('passes')->andReturn(false);
-
-		$validator = Validator::make(['file' => 'foobar'], ['file' => $mock_rule]);
-
-		$this->assertSame(
-			'O XML apresentou inconsistências. Pedimos que o envie novamente.',
+		$this->assertEquals(
+			'A estrutura do arquivo XML está inválida.',
 			$validator->errors()->first('file')
 		);
 	}
 
-	public function testValidFileWithIncorretDatePasses()
+	public function testFileWithInvalidIdentification()
 	{
-		$this->mockXmlContents('bar');
+		$this->mockXmlContents(['ibge_code' => '1234']);
 
-		$file = $this->getFile();
-		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
-		$passes = $rule->passes('dummy', $file);
+		$validator = Validator::make([
+			'file' => UploadedFile::fake()->create('xml.zip'),
+		], [
+			'file' => [new ZipHasValidCnesXML('0000')],
+		]);
+
+		$passes = $validator->passes();
 
 		$this->assertFalse($passes);
+		$this->assertEquals(
+			'XML com formato inválido. Por favor, verifique o código do IBGE, o campo de ORIGEM e o campo de DESTINO.', //phpcs:ignore
+			$validator->errors()->first('file')
+		);
 	}
 
-	public function testValidFileWithCorretDatePasses()
+	public function testFileWithInvalidDate()
 	{
-		$this->mockXmlContents('bar', null, '2020-10-19');
+		$this->mockXmlContents(['ibge_code' => '', 'date' => '2020-10-10']);
 
-		$file = $this->getFile();
-		$rule = new ZipHasValidCnesXML('bar', '2020-10-18');
-		$passes = $rule->passes('dummy', $file);
+		$validator = Validator::make([
+			'file' => UploadedFile::fake()->create('xml.zip'),
+		], [
+			'file' => [new ZipHasValidCnesXML('', '2020-10-10')],
+		]);
+
+		$passes = $validator->passes();
+
+		$this->assertFalse($passes);
+		$this->assertEquals(
+			'A data do XML deve ser posterior a data 2020-10-10.',
+			$validator->errors()->first('file')
+		);
+	}
+
+	public function testValidFilePasses()
+	{
+		$this->mockXmlContents(['ibge_code' => '123456', 'date' => '2020-10-10']);
+
+		$rule = new ZipHasValidCnesXML('123456', '2020-10-09');
+
+		$passes = $rule->passes('file', UploadedFile::fake()->create('xml.zip'));
 
 		$this->assertTrue($passes);
 	}
