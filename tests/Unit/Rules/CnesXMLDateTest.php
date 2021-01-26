@@ -34,7 +34,7 @@ class CnesXMLDateTest extends TestCase
 	public function testHasValidDateErrorMessage()
 	{
 		$this->assertEquals(
-			'A data do XML deve ser posterior a data 2020-10-09.',
+			'A competência do XML deve ser posterior a data 2020-10-09.',
 			$this->getErrorMessage(CnesXMLDate::class, ['2020-10-09'])
 		);
 	}
