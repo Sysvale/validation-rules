@@ -85,7 +85,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 
 		$this->assertFalse($passes);
 		$this->assertEquals(
-			'A data do XML deve ser posterior a data 2020-10-10.',
+			'A competência do XML deve ser posterior a data 2020-10-10.',
 			$validator->errors()->first('file')
 		);
 	}
