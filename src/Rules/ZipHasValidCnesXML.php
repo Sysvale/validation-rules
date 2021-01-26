@@ -9,12 +9,13 @@ use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 class ZipHasValidCnesXML implements Rule
 {
 	private $expected_ibge_code;
-	private $last_date_xml;
+	private $date;
+	protected $message;
 
-	public function __construct($expected_ibge_code, $last_date_xml = null)
+	public function __construct($expected_ibge_code, $date = null)
 	{
 		$this->expected_ibge_code = $expected_ibge_code;
-		$this->last_date_xml = $last_date_xml;
+		$this->date = $date;
 	}
 
 	/**
@@ -26,18 +27,12 @@ class ZipHasValidCnesXML implements Rule
 	 */
 	public function passes($attribute, $value)
 	{
-		$zip_handler = resolve(ZipWithXMLHandler::class)->buildZip($value->path());
+		$passes = $this->hasValidStructure($attribute, $value)
+			&& $this->hasValidIdentification($attribute, $value);
 
-		$xml = $zip_handler->getSimpleXMLElement();
-
-		$passes = $this->hasValidIdentification($xml)
-			&& $this->hasEstablishmentAndProfessionals($xml);
-
-		if (isset($this->last_date_xml)) {
-			$passes = $passes && $this->hasValidDate($xml);
+		if (isset($this->date)) {
+			$passes = $passes && $this->hasValidDate($attribute, $value);
 		}
-
-		$zip_handler->closeZip();
 
 		return $passes;
 	}
@@ -49,63 +44,38 @@ class ZipHasValidCnesXML implements Rule
 	 */
 	public function message()
 	{
-		return __('SysvaleValidationRules::messages.zip_has_valid_cnes_xml');
+		return $this->message;
 	}
 
-
-	protected function hasValidIdentification(SimpleXMLElement $xml)
+	protected function hasValidStructure($attribute, $value)
 	{
-		foreach ($xml->children() as $key => $identification) {
-			if ($key !== 'IDENTIFICACAO') {
-				return false;
-			}
+		$rule = new CnesXMLStructure();
 
-			$origin = (string) $identification['ORIGEM'];
-			$target = (string) $identification['DESTINO'];
-			$ibge_code = (string) $identification['CO_IBGE_MUN'];
-
-			if ($origin === 'PORTAL'
-				&& $target === 'ESUS_AB'
-				&& $ibge_code === $this->expected_ibge_code
-			) {
-				return true;
-			}
-		}
-
-		return false;
+		return $this->validateWithRule($rule, $attribute, $value);
 	}
 
-	protected function hasEstablishmentAndProfessionals(SimpleXMLElement $xml)
+	protected function hasValidIdentification($attribute, $value)
 	{
-		foreach ($xml->children() as $identification) {
-			$children  = array_keys((array) $identification->children());
+		$rule = new CnesXMLIdentification($this->expected_ibge_code);
 
-			$passes = array_reduce($children, function ($carry, $item) {
-				return $carry && ($item === 'PROFISSIONAIS' || $item === 'ESTABELECIMENTOS');
-			}, true);
+		return $this->validateWithRule($rule, $attribute, $value);
+	}
+
+	protected function hasValidDate($attribute, $value)
+	{
+		$rule = new CnesXMLDate($this->date);
+
+		return $this->validateWithRule($rule, $attribute, $value);
+	}
+
+	private function validateWithRule($rule, $attribute, $value)
+	{
+		$passes = $rule->passes($attribute, $value);
+
+		if (!$passes) {
+			$this->message = $rule->message();
 		}
 
 		return $passes;
-	}
-
-	private function getValueDateOrFalse($xml)
-	{
-		if (!empty($xml->{'IDENTIFICACAO'})) {
-			$identification = $xml->{'IDENTIFICACAO'};
-			return array_values((array) $identification->attributes())[0]['DATA'];
-		}
-
-		return false;
-	}
-
-	protected function hasValidDate(SimpleXMLElement $xml)
-	{
-		$current_date_xml = $this->getValueDateOrFalse($xml);
-
-		if ($current_date_xml > $this->last_date_xml) {
-			return true;
-		}
-
-		return false;
 	}
 }
