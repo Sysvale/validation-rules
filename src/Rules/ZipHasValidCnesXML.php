@@ -12,10 +12,11 @@ class ZipHasValidCnesXML implements Rule
 	private $date;
 	protected $message;
 
-	public function __construct($expected_ibge_code, $date = null)
+	public function __construct($expected_ibge_code, $date = null, $version_xsd = '2.1')
 	{
 		$this->expected_ibge_code = $expected_ibge_code;
 		$this->date = $date;
+		$this->version_xsd = $version_xsd;
 	}
 
 	/**
@@ -56,7 +57,7 @@ class ZipHasValidCnesXML implements Rule
 
 	protected function hasValidIdentification($attribute, $value)
 	{
-		$rule = new CnesXMLIdentification($this->expected_ibge_code);
+		$rule = new CnesXMLIdentification($this->expected_ibge_code, $this->version_xsd);
 
 		return $this->validateWithRule($rule, $attribute, $value);
 	}
