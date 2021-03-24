@@ -61,7 +61,7 @@ class CnesXMLIdentification implements Rule
 			if ($origin === 'PORTAL'
 				&& $target === 'ESUS_AB'
 				&& $ibge_code === $this->expected_ibge_code
-				&& ($version_xsd != null && $version_xsd === $this->version_xsd)
+				&& $version_xsd === $this->version_xsd
 			) {
 				return true;
 			}
