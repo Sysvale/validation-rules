@@ -16,11 +16,10 @@ class CnesXMLIdentificationTest extends TestCase
 	public function testPasses()
 	{
 		$ibge_code = '12345';
-		$version_xsd = '2.1';
 
-		$this->mockXmlContents(['ibge_code' => $ibge_code, 'version_xsd' => "VERSION_XSD=\"$version_xsd\""]);
+		$this->mockXmlContents(['ibge_code' => $ibge_code]);
 
-		$rule = new CnesXMLIdentification($ibge_code, $version_xsd);
+		$rule = new CnesXMLIdentification($ibge_code, '2.1');
 
 		$this->assertTrue($rule->passes('file', UploadedFile::fake()->create('xml.zip')));
 	}
@@ -29,7 +28,7 @@ class CnesXMLIdentificationTest extends TestCase
 	{
 		$ibge_code = '12345';
 
-		$this->mockXmlContents(['ibge_code' => $ibge_code]);
+		$this->mockXmlContents(['ibge_code' => $ibge_code, 'version_xsd' => '']);
 
 		$rule = new CnesXMLIdentification($ibge_code, '2.1');
 
