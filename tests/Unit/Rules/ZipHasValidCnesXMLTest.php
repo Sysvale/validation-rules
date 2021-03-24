@@ -82,7 +82,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 		$validator = Validator::make([
 			'file' => UploadedFile::fake()->create('xml.zip'),
 		], [
-			'file' => [new ZipHasValidCnesXML('', '2020-10-10', $version_xsd='2.1')],
+			'file' => [new ZipHasValidCnesXML('', '2020-10-10', $version_xsd = '2.1')],
 		]);
 
 		$passes = $validator->passes();
