@@ -42,7 +42,9 @@ class CnesXMLIdentification implements Rule
 	 */
 	public function message()
 	{
-		return __('SysvaleValidationRules::messages.cnes_xml_identification');
+		return __('SysvaleValidationRules::messages.cnes_xml_identification', [
+			'version_xsd' => $this->version_xsd,
+		]);
 	}
 
 
