@@ -35,12 +35,15 @@ class CnesXMLIdentificationTest extends TestCase
 		$this->assertFalse($rule->passes('file', UploadedFile::fake()->create('xml.zip')));
 	}
 
-	public function testNotPassesVersionXSDDiff2_1()
+	public function testNotPassesVersionXSDDiff21()
 	{
 		$ibge_code = '12345';
 		$version_xsd = '3.0';
 
-		$this->mockXmlContents(['ibge_code' => $ibge_code, 'version_xsd' => "VERSION_XSD=\"$version_xsd\""]);
+		$this->mockXmlContents([
+			'ibge_code' => $ibge_code,
+			'version_xsd' => "VERSION_XSD=\"$version_xsd\""
+		]);
 
 		$rule = new CnesXMLIdentification($ibge_code, '2.1');
 
