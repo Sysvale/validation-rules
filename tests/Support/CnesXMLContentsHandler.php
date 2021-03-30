@@ -15,10 +15,11 @@ trait CnesXMLContentsHandler
 		if (is_null($contents)) {
 			$ibge_code = $data['ibge_code'] ?? '';
 			$date = $data['date'] ?? '';
+			$version_xsd = $data['version_xsd'] ?? 'VERSION_XSD="2.1"';
 
 			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
 				<ImportarXMLCNES>
-					<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$ibge_code\">\r\n
+					<IDENTIFICACAO DATA=\"$date\" ORIGEM=\"PORTAL\" DESTINO=\"ESUS_AB\" CO_IBGE_MUN=\"$ibge_code\" $version_xsd>\r\n
 						<ESTABELECIMENTOS>\r\n
 						</ESTABELECIMENTOS>\r\n
 						<PROFISSIONAIS>\r\n

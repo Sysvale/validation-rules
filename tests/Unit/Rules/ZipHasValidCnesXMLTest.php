@@ -66,19 +66,23 @@ class ZipHasValidCnesXMLTest extends TestCase
 
 		$this->assertFalse($passes);
 		$this->assertEquals(
-			'XML com formato inválido. Por favor, verifique o código do IBGE, o campo de ORIGEM e o campo de DESTINO.', //phpcs:ignore
+			'XML com formato inválido. Por favor, verifique o código do IBGE, o campo de ORIGEM, o campo de DESTINO e a se a versão do XML compatível é a 2.1', //phpcs:ignore
 			$validator->errors()->first('file')
 		);
 	}
 
 	public function testFileWithInvalidDate()
 	{
-		$this->mockXmlContents(['ibge_code' => '', 'date' => '2020-10-10']);
+		$this->mockXmlContents([
+			'ibge_code' => '',
+			'date' =>'2020-10-10',
+			'version_xsd' => 'VERSION_XSD="2.1"'
+		]);
 
 		$validator = Validator::make([
 			'file' => UploadedFile::fake()->create('xml.zip'),
 		], [
-			'file' => [new ZipHasValidCnesXML('', '2020-10-10')],
+			'file' => [new ZipHasValidCnesXML('', '2020-10-10', $version_xsd = '2.1')],
 		]);
 
 		$passes = $validator->passes();
@@ -94,7 +98,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents(['ibge_code' => '123456', 'date' => '2020-10-10']);
 
-		$rule = new ZipHasValidCnesXML('123456', '2020-10-09');
+		$rule = new ZipHasValidCnesXML('123456', '2020-10-09', '2.1');
 
 		$passes = $rule->passes('file', UploadedFile::fake()->create('xml.zip'));
 
