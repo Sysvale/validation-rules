@@ -10,7 +10,7 @@ class CnesXMLIdentification implements Rule
 {
 	private $expected_ibge_code;
 
-	public function __construct($expected_ibge_code, $version_xsd)
+	public function __construct($expected_ibge_code, $version_xsd = '2.1')
 	{
 		$this->expected_ibge_code = $expected_ibge_code;
 		$this->version_xsd = $version_xsd;

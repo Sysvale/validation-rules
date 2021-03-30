@@ -50,6 +50,20 @@ class CnesXMLIdentificationTest extends TestCase
 		$this->assertFalse($rule->passes('file', UploadedFile::fake()->create('xml.zip')));
 	}
 
+	public function testSecondArgumentIsntPassed()
+	{
+		$ibge_code = '12345';
+
+		$this->mockXmlContents([
+			'ibge_code' => $ibge_code,
+			'version_xsd' => "VERSION_XSD=\"2.1\""
+		]);
+
+		$rule = new CnesXMLIdentification($ibge_code);
+
+		$this->assertTrue($rule->passes('file', UploadedFile::fake()->create('xml.zip')));
+	}
+
 	/**
 	 * @phpcs:disable Generic.Files.LineLength.TooLong
 	 */
