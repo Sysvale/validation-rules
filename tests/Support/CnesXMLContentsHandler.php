@@ -26,8 +26,6 @@ trait CnesXMLContentsHandler
 						</PROFISSIONAIS>\r\n
 					</IDENTIFICACAO>\r\n
 				</ImportarXMLCNES>\r\n";
-
-				dump($contents);
 		}
 
 		$handler_mock = Mockery::mock(ZipWithXMLHandler::class)->makePartial();
