@@ -66,7 +66,29 @@ class ZipHasValidCnesXMLTest extends TestCase
 
 		$this->assertFalse($passes);
 		$this->assertEquals(
-			'XML com formato inválido. Por favor, verifique o código do IBGE, o campo de ORIGEM, o campo de DESTINO e a se a versão do XML compatível é a 2.1', //phpcs:ignore
+			'XML com formato inválido. Por favor, verifique o código do IBGE, o campo de ORIGEM e o campo de DESTINO.', //phpcs:ignore
+			$validator->errors()->first('file')
+		);
+	}
+
+	public function testFileWithInvalidVersion()
+	{
+		$this->mockXmlContents([
+			'ibge_code' => '1234',
+			'version_xsd' => 'VERSION_XSD="2"'
+		]);
+
+		$validator = Validator::make([
+			'file' => UploadedFile::fake()->create('xml.zip'),
+		], [
+			'file' => [new ZipHasValidCnesXML('1234', null, '2.1')],
+		]);
+
+		$passes = $validator->passes();
+
+		$this->assertFalse($passes);
+		$this->assertEquals(
+			'A versão do XML deve ser compatível com a 2.1',
 			$validator->errors()->first('file')
 		);
 	}
@@ -75,14 +97,13 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents([
 			'ibge_code' => '',
-			'date' =>'2020-10-10',
-			'version_xsd' => 'VERSION_XSD="2.1"'
+			'date' =>'2020-10-10'
 		]);
 
 		$validator = Validator::make([
 			'file' => UploadedFile::fake()->create('xml.zip'),
 		], [
-			'file' => [new ZipHasValidCnesXML('', '2020-10-10', $version_xsd = '2.1')],
+			'file' => [new ZipHasValidCnesXML('', '2020-10-10')],
 		]);
 
 		$passes = $validator->passes();
@@ -92,6 +113,25 @@ class ZipHasValidCnesXMLTest extends TestCase
 			'A competência do XML deve ser posterior a data 2020-10-10.',
 			$validator->errors()->first('file')
 		);
+	}
+
+	public function testPassesWithoutVersionXSD()
+	{
+		$this->mockXmlContents([
+			'ibge_code' => '',
+			'date' =>'2020-10-11',
+			'version_xsd' => ''
+		]);
+
+		$validator = Validator::make([
+			'file' => UploadedFile::fake()->create('xml.zip'),
+		], [
+			'file' => [new ZipHasValidCnesXML('', '2020-10-10')],
+		]);
+
+		$passes = $validator->passes();
+
+		$this->assertTrue($passes);
 	}
 
 	public function testValidFilePasses()

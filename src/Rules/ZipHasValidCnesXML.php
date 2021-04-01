@@ -35,6 +35,10 @@ class ZipHasValidCnesXML implements Rule
 			$passes = $passes && $this->hasValidDate($attribute, $value);
 		}
 
+		if (isset($this->version_xsd)) {
+			$passes = $passes && $this->hasValidVersion($attribute, $value);
+		}
+
 		return $passes;
 	}
 
@@ -65,6 +69,13 @@ class ZipHasValidCnesXML implements Rule
 	protected function hasValidDate($attribute, $value)
 	{
 		$rule = new CnesXMLDate($this->date);
+
+		return $this->validateWithRule($rule, $attribute, $value);
+	}
+
+	protected function hasValidVersion($attribute, $value)
+	{
+		$rule = new CnesXMLVersionXSD($this->version_xsd);
 
 		return $this->validateWithRule($rule, $attribute, $value);
 	}

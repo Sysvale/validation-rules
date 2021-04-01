@@ -4,13 +4,14 @@ namespace Sysvale\ValidationRules\Rules;
 
 use SimpleXMLElement;
 use Illuminate\Contracts\Validation\Rule;
+use Sysvale\ValidationRules\Rules\CnesXMLRule;
 use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
-class CnesXMLIdentification implements Rule
+class CnesXMLIdentification extends CnesXMLRule implements Rule
 {
 	private $expected_ibge_code;
 
-	public function __construct($expected_ibge_code, $version_xsd = '2.1')
+	public function __construct($expected_ibge_code, $version_xsd = null)
 	{
 		$this->expected_ibge_code = $expected_ibge_code;
 		$this->version_xsd = $version_xsd;
@@ -47,28 +48,16 @@ class CnesXMLIdentification implements Rule
 		]);
 	}
 
-
 	protected function hasValidIdentification(SimpleXMLElement $xml)
 	{
-		foreach ($xml->children() as $key => $identification) {
-			if ($key !== 'IDENTIFICACAO') {
-				return false;
-			}
+		$identification = $this->getIdentificationAttributes($xml);
 
-			$origin = (string) $identification['ORIGEM'];
-			$target = (string) $identification['DESTINO'];
-			$ibge_code = (string) $identification['CO_IBGE_MUN'];
-			$version_xsd = (string) $identification['VERSION_XSD'];
+		$origin = (string) $identification['ORIGEM'] ?? '';
+		$target = (string) $identification['DESTINO'] ?? '';
+		$ibge_code = (string) $identification['CO_IBGE_MUN'] ?? '';
 
-			if ($origin === 'PORTAL'
-				&& $target === 'ESUS_AB'
-				&& $ibge_code === $this->expected_ibge_code
-				&& $version_xsd === $this->version_xsd
-			) {
-				return true;
-			}
-		}
-
-		return false;
+		return $origin === 'PORTAL'
+			&& $target === 'ESUS_AB'
+			&& $ibge_code === $this->expected_ibge_code;
 	}
 }
