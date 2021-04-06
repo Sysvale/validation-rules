@@ -7,13 +7,13 @@ use Illuminate\Contracts\Validation\Rule;
 use Sysvale\ValidationRules\Rules\CnesXMLRule;
 use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
-class CnesXMLDate extends CnesXMLRule implements Rule
+class CnesXMLVersionXSD extends CnesXMLRule implements Rule
 {
-	private $date;
+	private $version;
 
-	public function __construct($date)
+	public function __construct($version)
 	{
-		$this->date = $date;
+		$this->version = $version;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class CnesXMLDate extends CnesXMLRule implements Rule
 		$zip_handler = resolve(ZipWithXMLHandler::class)
 			->buildZip($value->path());
 
-		$passes = $this->hasValidDate($zip_handler->getSimpleXMLElement());
+		$passes = $this->hasValidVersion($zip_handler->getSimpleXMLElement());
 
 		$zip_handler->closeZip();
 
@@ -42,16 +42,16 @@ class CnesXMLDate extends CnesXMLRule implements Rule
 	 */
 	public function message()
 	{
-		return __('SysvaleValidationRules::messages.cnes_xml_date', [
-			'date' => $this->date,
+		return __('SysvaleValidationRules::messages.cnes_xml_version_xsd', [
+			'version_xsd' => $this->version,
 		]);
 	}
 
-	protected function hasValidDate(SimpleXMLElement $xml)
+	protected function hasValidVersion(SimpleXMLElement $xml)
 	{
 		$identification = $this->getIdentificationAttributes($xml);
-		$current_date_xml = $identification['DATA'] ?? null;
+		$current_version_xsd = $identification['VERSION_XSD'] ?? null;
 
-		return $current_date_xml > $this->date;
+		return $current_version_xsd === $this->version;
 	}
 }
