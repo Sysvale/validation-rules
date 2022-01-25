@@ -15,7 +15,7 @@ trait CnesXMLContentsHandler
 		if (is_null($contents)) {
 			$ibge_code = $data['ibge_code'] ?? '';
 			$date = $data['date'] ?? '';
-			$version_xsd = $data['version_xsd'] ?? 'VERSION_XSD="2.1"';
+			$version_xsd = $data['version_xsd'] ?? 'VERSAO_XSD="2.1"';
 
 			$contents = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>
 				<ImportarXMLCNES>

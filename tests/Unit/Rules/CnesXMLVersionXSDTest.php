@@ -18,7 +18,7 @@ class CnesXMLVersionXSDTest extends TestCase
 	{
 		$version = '2.1';
 
-		$this->mockXmlContents(['version_xsd' => "VERSION_XSD=\"$version\""]);
+		$this->mockXmlContents(['version_xsd' => "VERSAO_XSD=\"$version\""]);
 
 		$rule = new CnesXMLVersionXSD('2.1');
 
@@ -29,7 +29,7 @@ class CnesXMLVersionXSDTest extends TestCase
 	{
 		$version = '2';
 
-		$this->mockXmlContents(['version_xsd' => "VERSION_XSD=\"$version\""]);
+		$this->mockXmlContents(['version_xsd' => "VERSAO_XSD=\"$version\""]);
 
 		$rule = new CnesXMLVersionXSD('2.1');
 
