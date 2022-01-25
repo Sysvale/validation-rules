@@ -75,7 +75,7 @@ class ZipHasValidCnesXMLTest extends TestCase
 	{
 		$this->mockXmlContents([
 			'ibge_code' => '1234',
-			'version_xsd' => 'VERSION_XSD="2"'
+			'version_xsd' => 'VERSAO_XSD="2"'
 		]);
 
 		$validator = Validator::make([

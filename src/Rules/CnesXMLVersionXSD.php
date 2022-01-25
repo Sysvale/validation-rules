@@ -50,7 +50,7 @@ class CnesXMLVersionXSD extends CnesXMLRule implements Rule
 	protected function hasValidVersion(SimpleXMLElement $xml)
 	{
 		$identification = $this->getIdentificationAttributes($xml);
-		$current_version_xsd = $identification['VERSION_XSD'] ?? null;
+		$current_version_xsd = $identification['VERSAO_XSD'] ?? null;
 
 		return $current_version_xsd === $this->version;
 	}
