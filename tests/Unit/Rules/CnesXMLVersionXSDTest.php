@@ -20,7 +20,7 @@ class CnesXMLVersionXSDTest extends TestCase
 
 		$this->mockXmlContents(['version_xsd' => "VERSAO_XSD=\"$version\""]);
 
-		$rule = new CnesXMLVersionXSD('2.1');
+		$rule = new CnesXMLVersionXSD(['2.1']);
 
 		$this->assertTrue($rule->passes('file', UploadedFile::fake()->create('xml.zip')));
 	}
