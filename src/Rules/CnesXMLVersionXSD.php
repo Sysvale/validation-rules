@@ -9,11 +9,11 @@ use Sysvale\ValidationRules\Support\ZipWithXMLHandler;
 
 class CnesXMLVersionXSD extends CnesXMLRule implements Rule
 {
-	private $version;
+	private $versions;
 
-	public function __construct($version)
+	public function __construct($versions = [])
 	{
-		$this->version = $version;
+		$this->versions = (array) $versions;
 	}
 
 	/**
@@ -43,7 +43,7 @@ class CnesXMLVersionXSD extends CnesXMLRule implements Rule
 	public function message()
 	{
 		return __('SysvaleValidationRules::messages.cnes_xml_version_xsd', [
-			'version_xsd' => $this->version,
+			'version_xsd' => implode(' ou ', $this->versions),
 		]);
 	}
 
@@ -52,6 +52,6 @@ class CnesXMLVersionXSD extends CnesXMLRule implements Rule
 		$identification = $this->getIdentificationAttributes($xml);
 		$current_version_xsd = $identification['VERSAO_XSD'] ?? null;
 
-		return $current_version_xsd === $this->version;
+		return in_array($current_version_xsd, $this->versions);
 	}
 }
